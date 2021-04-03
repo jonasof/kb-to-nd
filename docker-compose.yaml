@@ -1,0 +1,57 @@
+version: '3.6'
+services:
+  app:
+    build: docker
+    ports:
+      - "8000:80"
+    depends_on:
+      - mariadb
+    environment:
+      KANBOARD_DATABASE_DSN: mysql:host=mariadb;dbname=kanboard 
+      KANBOARD_DATABASE_USER: root
+      KANBOARD_DATABASE_PASSWORD: mariadb
+
+      NEXTCLOUD_DATABASE_DSN: mysql:host=mariadb;dbname=owncloud 
+      NEXTCLOUD_DATABASE_USER: root
+      NEXTCLOUD_DATABASE_PASSWORD: mariadb
+
+      NEXTCLOUD_USERNAME: admin
+    volumes:
+      - .:/app
+    working_dir: /app
+    
+  kanboard:
+    image: kanboard/kanboard:v1.2.18
+    ports:
+      - "8002:80"
+    depends_on:
+      - mariadb
+    environment:
+      DATABASE_URL: mysql://root:mariadb@mariadb/kanboard
+  nextcloud:
+    image: nextcloud:20
+    ports:
+      - "8003:80"
+    depends_on:
+      - mariadb
+    environment:
+      MYSQL_HOST: mariadb
+      MYSQL_DATABASE: owncloud
+      MYSQL_USER: root
+      MYSQL_PASSWORD: mariadb    
+  mariadb:
+    image: mariadb:10.3
+    ports:
+      - "8001:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mariadb
+      MYSQL_DATABASE: mariadb
+      MYSQL_USER: mariadb
+      MYSQL_PASSWORD: mariadb
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.DaemonName}}(image={{.ImageName}};name={{.Name}};id={{.ID}})"
+    restart: on-failure
+    volumes:
+     - ${PWD}/.mariadb:/var/lib/mysql
