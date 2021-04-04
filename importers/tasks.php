@@ -51,9 +51,9 @@ function insertTask($task, $column_id_mapping, $subtasks): int
     $insert_query = $nextcloud_pdo->prepare("
         INSERT INTO oc_deck_cards
         (title, description, stack_id, `type`, last_modified, last_editor, 
-        created_at, owner, `order`, archived, duedate)
+        created_at, owner, `order`, archived, duedate, notified)
         VALUES(:title, :description, :stack_id, :type, :last_modified, :last_editor, 
-        :created_at, :owner, :order, :archived, :duedate);
+        :created_at, :owner, :order, :archived, :duedate, :notified);
     ");
 
     $insert_query->execute([
@@ -67,7 +67,8 @@ function insertTask($task, $column_id_mapping, $subtasks): int
         ':owner' => $nextcloud_user,
         ':order' => $task->position,
         ':archived' => $task->is_active ? 0 : 1,
-        ':duedate' => $task->date_due ? date("Y-m-d H:i:s", $task->date_due): null
+        ':duedate' => $task->date_due ? date("Y-m-d H:i:s", $task->date_due): null,
+        ':notified' => $task->date_due !== "0" && ((int) $task->date_due < time()) ? 1 : 0,
     ]);
 
     return $nextcloud_pdo->lastInsertId();
