@@ -60,7 +60,7 @@ function insertTask($task, $column_id_mapping, $subtasks): int
         ':title' => $task->title,
         ':description' => $description,
         ':stack_id' =>  $column_id_mapping[(int) $task->column_id],
-        ':type' =>  "text",
+        ':type' =>  "plain",
         ':last_modified' => $task->date_modification,
         ':last_editor' => $nextcloud_user,
         ':created_at' => $task->date_creation,
