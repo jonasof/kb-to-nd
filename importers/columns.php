@@ -25,7 +25,7 @@ function readColumns()
 
     $query = $kanboard_pdo->query("
         SELECT id, title, ${kanboard_mysql_escape}position${kanboard_mysql_escape}, project_id, task_limit, description, hide_in_dashboard
-        FROM columns;
+        FROM ${kanboard_mysql_escape}columns${kanboard_mysql_escape};
     ");
 
     $query->execute();
