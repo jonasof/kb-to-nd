@@ -23,8 +23,8 @@ function readColumns()
     global $kanboard_pdo;
 
     $query = $kanboard_pdo->query("
-        SELECT id, title, `position`, project_id, task_limit, description, hide_in_dashboard
-        FROM `columns`;
+        SELECT id, title, position, project_id, task_limit, description, hide_in_dashboard
+        FROM columns;
     ");
 
     $query->execute();
