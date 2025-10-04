@@ -34,6 +34,13 @@ if (!userExists($nextcloud_user)) {
     die("Nextcloud user '$nextcloud_user' does not exists\n");
 }
 
+if (str_starts_with(getenv("KANBOARD_DATABASE_DSN"),'mysql')) {
+    $kanboard_mysql_escape="`";
+}
+else {
+    $kanboard_mysql_escape="";
+}
+
 # Execution
 
 $nextcloud_pdo->beginTransaction();

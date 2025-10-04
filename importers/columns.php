@@ -21,10 +21,11 @@ function importColumns($project_id_mapping): ColumnImportResults
 function readColumns()
 {
     global $kanboard_pdo;
+    global $kanboard_mysql_escape;
 
     $query = $kanboard_pdo->query("
-        SELECT id, title, `position`, project_id, task_limit, description, hide_in_dashboard
-        FROM `columns`;
+        SELECT id, title, ${kanboard_mysql_escape}position${kanboard_mysql_escape}, project_id, task_limit, description, hide_in_dashboard
+        FROM ${kanboard_mysql_escape}columns${kanboard_mysql_escape};
     ");
 
     $query->execute();

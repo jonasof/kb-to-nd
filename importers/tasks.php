@@ -23,10 +23,11 @@ function importTasks($column_id_mapping, $all_subtasks): TaskImportResults
 function readTasks()
 {
     global $kanboard_pdo;
+    global $kanboard_mysql_escape;
 
     $query = $kanboard_pdo->query("
         SELECT id, title, description, date_creation, date_completed, date_due, 
-        color_id, project_id, column_id, owner_id, `position`, score, is_active, 
+        color_id, project_id, column_id, owner_id, ${kanboard_mysql_escape}position${kanboard_mysql_escape}, score, is_active, 
         category_id, creator_id, date_modification, reference, date_started, 
         time_spent, time_estimated, swimlane_id, date_moved, recurrence_status, 
         recurrence_trigger, recurrence_factor, recurrence_timeframe, recurrence_basedate, 
